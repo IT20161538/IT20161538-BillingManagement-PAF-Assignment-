@@ -20,116 +20,25 @@ $(document).on("click", "#btnSave", function(event)
 	var status = validateBillingForm(); 
 	if (status != true) 
 	 { 
-		 $("#alertError").text(status); 
-		 $("#alertError").show(); 
-		 return; 
+	 $("#alertError").text(status); 
+	 $("#alertError").show(); 
+	 return; 
 	 } 
 	
 	// If valid------------------------
-	var type = ($("#hidBillingIDSave").val() == "") ? "POST" : "PUT"; 
-	
-	$.ajax( 
-	{ 
-		 url : "billingAPI", 
-		 type : type, 
-		 data : $("#formbilling").serialize(), 
-		 dataType : "text", 
-		 complete : function(response, status) 
-		 { 
-			 onBillingSaveComplete(response.responseText, status); 
-		 } 
-	}); 
+	 $("#formbilling").submit(); 
 }); 
-
-
-function onBillingSaveComplete(response, status) 
-{ 
-	if (status == "success") 
-	{ 
-		 var resultSet = JSON.parse(response); 
-		 
-		 if (resultSet.status.trim() == "success") 
-		 { 
-			 $("#alertSuccess").text("Successfully saved."); 
-			 $("#alertSuccess").show(); 
-			 
-			 $("#divBillingGrid").html(resultSet.data); 
-		 } else if (resultSet.status.trim() == "error") 
-		 { 
-			 $("#alertError").text(resultSet.data); 
-			 $("#alertError").show(); 
-		 } 
-		 
-	} else if (status == "error") 
-	{ 
-		 $("#alertError").text("Error while saving."); 
-		 $("#alertError").show(); 
-	} else
-	{ 
-		 $("#alertError").text("Unknown error while saving.."); 
-		 $("#alertError").show(); 
-	 } 
-	
-	$("#hidBillingIDSave").val(""); 
-	$("#formbilling")[0].reset(); 
-}
-
 
 // UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) 
 { 
-	 $("#hidBillingIDSave").val($(this).data("bill_id")); 
-	 $("#bill_No").val($(this).closest("tr").find('td:eq(0)').text()); 
+	 $("#hidBillingIDSave").val($(this).closest("tr").find('#hidBillingIDUpdate').val()); 
+	 $("#bill_no").val($(this).closest("tr").find('td:eq(0)').text()); 
 	 $("#bill_desc").val($(this).closest("tr").find('td:eq(1)').text()); 
 	 $("#bill_type").val($(this).closest("tr").find('td:eq(2)').text()); 
-	 $("#unit").val($(this).closest("tr").find('td:eq(3)').text());
-	 $("#cus_id").val($(this).closest("tr").find('td:eq(4)').text());
+	 $("#unit").val($(this).closest("tr").find('td:eq(3)').text()); 
 }); 
 
-//REMOVE
-$(document).on("click", ".btnRemove", function(event) 
-{ 
-	$.ajax( 
-	{ 
-		 url : "billingAPI", 
-		 type : "DELETE", 
-		 data : "bill_id=" + $(this).data("bill_id"),
-		 dataType : "text", 
-		 complete : function(response, status) 
-		 { 
-			 onBillingSaveComplete(response.responseText, status); 
-		 } 
-	}); 
-});
-
-function onBillingSaveComplete(response, status) 
-{ 
-	if (status == "success") 
-	{ 
- 
-		var resultSet = JSON.parse(response); 
-		
-		if (resultSet.status.trim() == "success") 
-		{ 
-			 $("#alertSuccess").text("Successfully deleted."); 
-			 $("#alertSuccess").show(); 
-			 $("#divBillingGrid").html(resultSet.data); 
-		} else if (resultSet.status.trim() == "error") 
-		{ 
-			$("#alertError").text(resultSet.data); 
-			$("#alertError").show(); 
-		}
-		
-	} else if (status == "error") 
-	{ 
-		$("#alertError").text("Error while deleting."); 
-		$("#alertError").show(); 
-	} else
-	{ 
-		$("#alertError").text("Unknown error while deleting.."); 
-		$("#alertError").show(); 
-	} 
-}
 
 //CLIENT-MODEL================================================================
 function validateBillingForm() 
@@ -139,6 +48,14 @@ function validateBillingForm()
 	 { 
 	 return "Insert Bill No."; 
 	 } 
+	
+	// is numerical value
+	var tmpNo = $("#bill_no").val().trim(); 
+	if (!$.isNumeric(tmpNo)) 
+	 { 
+	 return "Insert a numerical value for Bill No."; 
+	 } 
+	
 	// Bill desc----------------------------
 	if ($("#bill_desc").val().trim() == "") 
 	 { 

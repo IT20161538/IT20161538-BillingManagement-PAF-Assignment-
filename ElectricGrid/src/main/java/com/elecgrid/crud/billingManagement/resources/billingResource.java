@@ -55,10 +55,10 @@ public class billingResource {
 	@Path("/updateBill")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String updateBill(@FormParam("bill_no") String bill_no, @FormParam("bill_type") String bill_type,
-			@FormParam("bill_desc") String bill_desc, @FormParam("unit") String unit, @FormParam("bill_id") String bill_id) {
+	public String updateBill(@FormParam("bill_no") String bill_no, @FormParam("bill_desc") String bill_desc,
+			@FormParam("bill_type") String bill_type, @FormParam("unit") String unit, @FormParam("bill_id") String bill_id) {
 			
-		String output = billServ.updateBill(bill_id, bill_no, bill_type, bill_desc, unit);
+		String output = billServ.updateBill(bill_id, bill_no, bill_desc, bill_type, unit);
 		
 		return output;
 	}

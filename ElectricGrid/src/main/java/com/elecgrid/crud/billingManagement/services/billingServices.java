@@ -39,15 +39,15 @@ public class billingServices {
 				}
 				
 				// Prepare the table to be displayed
-				output = "<table border='1'><tr><th>Bill ID</th>" 
-				+ "<th>Bill NO</th>" 
-				+ "<th>Customer Name</th>" 
+				output = "<table border='1'><tr><th>Bill NO</th>"  
+				//+ "<th>Customer Name</th>"
 				+ "<th>Bill Description</th>" 
 				+ "<th>Bill Type</th>" 
 				+ "<th>Units</th>" +
 				"<th>Update</th><th>Remove</th></tr>";
 				
-				String query = "select * from bills b, customer c where c.cus_id = b.cus_id";
+				String query = "select * from bills";
+				//String query = "select * from bills b, customer c where c.cus_id = b.cus_id";
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
 				
@@ -56,24 +56,24 @@ public class billingServices {
 					
 					String bill_id = Integer.toString(rs.getInt("bill_id"));
 					String bill_no = rs.getString("bill_no");
-					String cus_name = rs.getString("cus_name");
+					//String cus_name = rs.getString("cus_name");
 					String bill_desc = rs.getString("bill_desc");
 					String bill_type = rs.getString("bill_type");
-					String units = rs.getString("unit");
+					String unit = rs.getString("unit");
 					
 					// Add into the table
-					output += "<tr><td>" + bill_id + "</td>";
-					output += "<td>" + bill_no + "</td>";
-					output += "<td>" + cus_name + "</td>";
+					output += "<tr><td><input id='hidBillingIDUpdate' name='hidBillingIDUpdate' type='hidden' value='" + bill_id + "'>"
+							+ bill_no + "</td>";
+					//output += "<td>" + cus_name + "</td>";
 					output += "<td>" + bill_desc + "</td>";
 					output += "<td>" + bill_type + "</td>";
-					output += "<td>" + units + "</td>";
+					output += "<td>" + unit + "</td>";
 					
 					// buttons
-					output += "<td><input name='btnUpdate' type='button' value='Update'class='btn btn-secondary'></td>"
-					+ "<td><form method='post' action=''>"
+					output += "<td><input name='btnUpdate' type='button' value='Update'class=' btnUpdate btn btn-secondary'></td>"
+					+ "<td><form method='post' action='billingManagement.jsp'>"
 					+ "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
-					+ "<input name='cus_id' type='hidden' value='" + bill_id
+					+ "<input name='hidBillingIDDelete' type='hidden' value='" + bill_id
 					+ "'>" + "</form></td></tr>";
 					
 				}
@@ -87,6 +87,7 @@ public class billingServices {
 			}
 			return output;
 		}
+		
 		
 		//add billing
 		public String insertBill(String bill_no, String bill_desc, String bill_type,String unit, String cus_id) {
@@ -124,7 +125,7 @@ public class billingServices {
 		}
 		
 		//update billing
-		public String updateBill(String bill_id, String bill_no, String bill_type, String bill_desc,String unit ) {
+		public String updateBill(String bill_id, String bill_no, String bill_desc, String bill_type,String unit ) {
 			
 			String output="";
 			
@@ -136,14 +137,14 @@ public class billingServices {
 				{ return "Error!! While connecting to the database for updating the " + bill_id;}
 				
 				// create a prepared statement
-				String query = "UPDATE bills SET bill_no=?, bill_type=?, bill_desc=?, unit=? WHERE bill_id=?";
+				String query = "UPDATE bills SET bill_no=?, bill_desc=?, bill_type=?, unit=? WHERE bill_id=?";
 				
 				PreparedStatement preparedStmt = con.prepareStatement(query);
 				
 				// binding values
 				preparedStmt.setString(1, bill_no);
-				preparedStmt.setString(2, bill_type);
-				preparedStmt.setString(3, bill_desc);
+				preparedStmt.setString(2, bill_desc);
+				preparedStmt.setString(3, bill_type);
 				preparedStmt.setString(4, unit);
 				preparedStmt.setInt(5,Integer.parseInt(bill_id));
 				
