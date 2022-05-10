@@ -40,14 +40,15 @@ public class billingServices {
 				
 				// Prepare the table to be displayed
 				output = "<table border='1'><tr><th>Bill NO</th>"  
-				//+ "<th>Customer Name</th>"
-				+ "<th>Bill Description</th>" 
-				+ "<th>Bill Type</th>" 
-				+ "<th>Units</th>" +
+				+ "<th>Bill Description </th>" 
+				+ "<th>Bill Type </th>" 
+				+ "<th>Units </th>" 
+				+ "<th>Cus_ID </th>"
+				+ "<th>Cus_Name </th>"+
 				"<th>Update</th><th>Remove</th></tr>";
 				
-				String query = "select * from bills";
-				//String query = "select * from bills b, customer c where c.cus_id = b.cus_id";
+				
+				String query = "select * from bills b, customer c where c.cus_id = b.cus_id";
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(query);
 				
@@ -56,18 +57,20 @@ public class billingServices {
 					
 					String bill_id = Integer.toString(rs.getInt("bill_id"));
 					String bill_no = rs.getString("bill_no");
-					//String cus_name = rs.getString("cus_name");
 					String bill_desc = rs.getString("bill_desc");
 					String bill_type = rs.getString("bill_type");
 					String unit = rs.getString("unit");
+					String cus_id = rs.getString("cus_id");
+					String cus_name = rs.getString("cus_name");
 					
 					// Add into the table
 					output += "<tr><td><input id='hidBillingIDUpdate' name='hidBillingIDUpdate' type='hidden' value='" + bill_id + "'>"
 							+ bill_no + "</td>";
-					//output += "<td>" + cus_name + "</td>";
 					output += "<td>" + bill_desc + "</td>";
 					output += "<td>" + bill_type + "</td>";
 					output += "<td>" + unit + "</td>";
+					output += "<td>" + cus_id + "</td>";
+					output += "<td>" + cus_name + "</td>";
 					
 					// buttons
 					/*output += "<td><input name='btnUpdate' type='button' value='Update'class=' btnUpdate btn btn-secondary'></td>"
