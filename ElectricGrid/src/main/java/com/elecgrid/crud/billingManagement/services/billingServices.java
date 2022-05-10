@@ -70,21 +70,26 @@ public class billingServices {
 					output += "<td>" + unit + "</td>";
 					
 					// buttons
-					output += "<td><input name='btnUpdate' type='button' value='Update'class=' btnUpdate btn btn-secondary'></td>"
+					/*output += "<td><input name='btnUpdate' type='button' value='Update'class=' btnUpdate btn btn-secondary'></td>"
 					+ "<td><form method='post' action='billingManagement.jsp'>"
 					+ "<input name='btnRemove' type='submit' value='Remove'class='btn btn-danger'>"
 					+ "<input name='hidBillingIDDelete' type='hidden' value='" + bill_id
-					+ "'>" + "</form></td></tr>";
+					+ "'>" + "</form></td></tr>";*/
 					
+					output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td>"+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-billid='"
+							 + bill_id + "'>" + "</td></tr>"; 
 				}
 				
 				con.close();
 				
+				// Complete the html table
 				output += "</table>";
-			} catch (Exception e) {
+			} catch (Exception e) 
+			{
 				output = "Error while reading bill items";
 				System.err.println(e.getMessage());
 			}
+			
 			return output;
 		}
 		
@@ -99,10 +104,13 @@ public class billingServices {
 				Connection con = connect();
 				
 				if(con == null)
-				{return "Error while connecting to the database for inserting data";}
+				{
+					return "Error while connecting to the database for inserting data";
+				}
 				
 				String insertQuery = "insert into bills (`bill_no`, `bill_desc`, `bill_type`, `unit`, `cus_id`)" + "values(?,?,?,?,?)";
 				
+				// binding values
 				PreparedStatement ps = con.prepareStatement(insertQuery);
 				
 				ps.setString(1, bill_no);
@@ -111,13 +119,20 @@ public class billingServices {
 				ps.setString(4, unit);
 				ps.setString(5, cus_id);
 
+				// execute the statement
 				ps.execute();
 				con.close();
 				
-				output = "Inserted Successfully";
+				//output = "Inserted Successfully";
 
-			} catch(Exception e) {
-				output = "Error While inserting the bill.";
+				String newBills = viewBills(); 
+				output = "{\"status\":\"success\", \"data\": \"" + newBills + "\"}"; 
+				
+			} 
+			catch(Exception e) 
+			{
+				//output = "Error While inserting the bill.";
+				output = "{\"status\":\"error\", \"data\": \"Error while inserting the bill.\"}"; 
 				System.err.println(e.getMessage());
 			}
 
@@ -134,7 +149,9 @@ public class billingServices {
 				Connection con = connect();
 				
 				if (con==null)
-				{ return "Error!! While connecting to the database for updating the " + bill_id;}
+				{ 
+					return "Error!! While connecting to the database for updating the " + bill_id;
+				}
 				
 				// create a prepared statement
 				String query = "UPDATE bills SET bill_no=?, bill_desc=?, bill_type=?, unit=? WHERE bill_id=?";
@@ -153,16 +170,21 @@ public class billingServices {
 				
 				con.close();
 				
-				output = "Updated successfully";
+				//output = "Updated successfully";
+				
+				String newBills = viewBills(); 
+				output = "{\"status\":\"success\", \"data\": \"" + newBills + "\"}"; 
 				
 			} catch (Exception e) {
 				
-				output = "Error while updating the " + bill_no;
+				//output = "Error while updating the " + bill_no;
+				output = "{\"status\":\"error\", \"data\": \"Error while updating the bill.\"}"; 
 				System.err.println(e.getMessage());
 			}
 			
 			return output;
 		}
+		
 		
 		//view Billing
 		public String viewBill(int cus_id) {
@@ -228,7 +250,9 @@ public class billingServices {
 			Connection con = connect();
 			
 			if (con == null)
-			{return "Error while connecting to the database for deleting."; }
+			{
+				return "Error while connecting to the database for deleting."; 
+			}
 			
 			// create a prepared statement
 			String query = "delete from bills WHERE bill_id=?";
@@ -242,11 +266,16 @@ public class billingServices {
 			preparedStmt.execute();
 			
 			con.close();
-			output = "Deleted successfully";
+			
+			//output = "Deleted successfully";
+			String newBills = viewBills(); 
+			output = "{\"status\":\"success\", \"data\": \"" + newBills + "\"}"; 
+			
 			}
 			catch (Exception e)
 			{
-				output = "Error while deleting the bill.";
+				//output = "Error while deleting the bill.";
+				output = "{\"status\":\"error\", \"data\": \"Error while deleting the bill.\"}"; 
 				System.err.println(e.getMessage());
 			}
 		return output;

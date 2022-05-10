@@ -2,46 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 pageEncoding="ISO-8859-1"%>
 
-<% 
-	 
-//Save---------------------------------
-if (request.getParameter("bill_no") != null) 
-{ 
-	billingServices billObj = new billingServices();
-	String stsMsg = ""; 
-	
-	//Insert--------------------------
-	if (request.getParameter("hidBillingIDSave") == "") 
-	{ 
-		stsMsg = billObj.insertBill(request.getParameter("bill_no"), 
-		request.getParameter("bill_desc"), 
-		request.getParameter("bill_type"), 
-		request.getParameter("unit"), 
-		request.getParameter("cus_id")); 
-	} 
-	else//Update----------------------
-	{ 
-		stsMsg = billObj.updateBill(request.getParameter("hidBillingIDSave"), 
-		request.getParameter("bill_no"), 
-		request.getParameter("bill_desc"), 
-		request.getParameter("bill_type"), 
-		request.getParameter("unit"));
-	} 
-	
-	session.setAttribute("statusMsg", stsMsg); 
-} 
-	
-//Delete-----------------------------
-if (request.getParameter("hidBillingIDDelete") != null) 
-{ 
-	billingServices billObj = new billingServices();
-	String stsMsg = 
-	billObj.deleteBill(request.getParameter("hidBillingIDDelete")); 
-	session.setAttribute("statusMsg", stsMsg); 
-}
-
-%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,7 +17,7 @@ if (request.getParameter("hidBillingIDDelete") != null)
 
 	<h1>Billing Management</h1>
 	
-	<form id="formbilling" name="formbilling" method="post" action="billingManagement.jsp">
+	<form id="formbilling" name="formbilling">
 	 	Bill No: 
 	 	<input id="bill_no" name="bill_no" type="text" 
 	 		class="form-control form-control-sm">
