@@ -79,7 +79,7 @@ public class billingServices {
 					+ "<input name='hidBillingIDDelete' type='hidden' value='" + bill_id
 					+ "'>" + "</form></td></tr>";*/
 					
-					output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td>"+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-billid='"
+					output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary' data-billid='" + bill_id + "'></td>"+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger' data-billid='"
 							 + bill_id + "'>" + "</td></tr>"; 
 				}
 				
